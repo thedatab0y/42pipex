@@ -6,84 +6,80 @@
 /*   By: busmanov <busmanov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 19:19:24 by busmanov          #+#    #+#             */
-/*   Updated: 2022/11/12 22:20:20 by busmanov         ###   ########.fr       */
+/*   Updated: 2022/11/13 13:21:11 by busmanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int ft_strlen(char *string)//returns the len of the string
+int	ft_strlen(char *str)
 {
-	int x;
+	int	i;
 
-	x = 0;
-	if (!string)//checking if the string is not NULL
-		return(NULL);
-	while (string[x])
-		x++;
-	return (x);
+	i = 0;
+	if (!str)
+		return (i);
+	while (str[i])
+		i++;
+	return (i);
 }
 
-//example:
-//busmanov@c2s14d75 func % ewru
-//zsh: command not found: ewru
-
-void error_msg(char *command)
-{//using ft_strlen to get the len of the string while writing
+void	aff_error(char *cmd)
+{
 	write(2, "command not found: ", ft_strlen("command not found: "));
-	write(2, command, ft_strlen(command));
-	write(2, "\n", 1);//printing new line
-	exit(EXIT_FAILURE);//exiting
+	write(2, cmd, ft_strlen(cmd));
+	write(2, "\n", 1);
+	exit(EXIT_FAILURE);
 }
 
-char obtain_cmdpath(char *path, char *command)
+char	*gpathcmd(char *p, char *cmd)
 {
-	char *p;
-	
-	p = ft_strjoin(path, command);
-	free(path);
-	return (p);
-}
-//I need what is 5 chars after from environments path
-char *obtain_path (char **envp)
-{
-	int x;
+	char	*path;
 
-	x = 0;
-	while (envp[x])
+	path = ft_strjoin(p, cmd);
+	free(p);
+	return (path);
+}
+
+char	*getpath(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
 	{
-		if (ft_strncmp(envp[x], "PATH=", 5) == 0)
-			return (envp[x] + 5); //return what is 5 chars after
-		x++;
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			return (envp[i] + 5);
+		i++;
 	}
 	return (NULL);
 }
 
-void execute (char **envp, char *av)
+void	exec(char **envp, char *argv)
 {
-	char 	**command;
-	char 	**splitted_path;
-	char 	**second_path;
-	int 	x;
-	int 	counter;
+	char	**pathenv;
+	char	*rightpath;
+	char	**cmd;
+	int		i;
+	int		count;
 
-	splitted_path = ft_split(obtain_path(envp), ':');
-	command = ft_split(av, ' ');
-	x = 0;
-	counter = 0;
-	while (splitted_path[x])
+	pathenv = ft_split(getpath(envp), ':');
+	cmd = ft_split(argv, ' ');
+	i = 0;
+	count = 0;
+	while (pathenv[i])
 	{
-		second_path = obtain_cmdpath(ft_strjoin(splitted_path[x], "/"), command[0]);
-		if (access(second_path, R_OK) == 0)
+		rightpath = gpathcmd(ft_strjoin(pathenv[i], "/"), cmd[0]);
+		if (access(rightpath, R_OK) == 0)
 		{
-			if (execve(second_path, command, envp) == -1)
-				perror("execve error:");
+			if (execve(rightpath, cmd, envp) == -1)
+				perror("Execve : ");
 		}
 		else
-			counter++;
-		free(second_path);
-		x++;
+			count++;
+		free(rightpath);
+		i++;
 	}
-	if (counter == x);
-		error_msg(command[0]);
+	if (count == i)
+		aff_error(cmd[0]);
 }

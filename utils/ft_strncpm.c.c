@@ -6,22 +6,29 @@
 /*   By: busmanov <busmanov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 22:35:37 by busmanov          #+#    #+#             */
-/*   Updated: 2022/11/12 22:36:40 by busmanov         ###   ########.fr       */
+/*   Updated: 2022/11/13 00:25:50 by busmanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../func/pipex.h"
 
-int	ft_strncmp(const char *st1, const char *st2, size_t x)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t	n;
+	int				i;
+	size_t			j;
+	unsigned char	*s3;
+	unsigned char	*s4;
 
-	n = 0;
-	if (x == 0)
-		return (0);
-	while (n < x - 1 && st1[n] != '\0' && st2[n] != '\0' && st1[n] == st2[n])
-	{
-		n++;
+	s3 = (unsigned char *)s1;
+	s4 = (unsigned char *)s2;
+	i = 0;
+	j = 1;
+	if (n == 0)
+		return (-1);
+	while (s3[i] && s4[i] && s3[i] == s4[i] && j < n)
+	{	
+		i++;
+		j++;
 	}
-	return ((unsigned char)st1[n] - (unsigned char)st2[n]);
+	return (s3[i] - s4[i]);
 }

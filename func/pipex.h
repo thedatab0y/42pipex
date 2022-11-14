@@ -6,7 +6,7 @@
 /*   By: busmanov <busmanov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 19:19:22 by busmanov          #+#    #+#             */
-/*   Updated: 2022/11/12 22:28:15 by busmanov         ###   ########.fr       */
+/*   Updated: 2022/11/13 13:17:09 by busmanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,20 @@
 #include <fcntl.h>// It allows the program to place a read or a write
 #include <string.h>//for stderr
 
-char obtain_cmdpath(char *path, char *command);
-char *obtain_path (char **envp);
-void execute (char **envp, char *av);
+// char	*gpathcmd(char *p, char *cmd);
+// //char 	obtain_cmdpath(char *path, char *command);
+// char	*getpath(char **envp);
+// void	exec(char **envp, char *argv);
+// char	**ft_split(char const *s, char c);
+// //int 	ft_strlen(char *string);
+// char	*ft_strjoin(char const *s1, char const *s2);
+// int		ft_strncmp(const char *s1, const char *s2, size_t n);
+
+char	*getpath(char **envp);
+char	*gpathcmd(char *p, char *cmd);
+void	exec(char **envp, char *argv);
 char	**ft_split(char const *s, char c);
-int ft_strlen(char *string);
-
-
+char	*ft_strjoin(char const *s1, char const *s2);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 #endif

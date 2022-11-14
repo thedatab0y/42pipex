@@ -1,28 +1,31 @@
-NAME= pipex.a
-
 CC = gcc
-CFLAGS= -Wall -Werror -Wextra -g
-HEADER= pipex.h
-RM= rm -rf
-NAME = pipex
-#DEBUG = -fsanitize=address
 
+NAME= pipex
+
+CFLAGS= -Wall -Werror -Wextra
+
+HEADER= pipex.h
+
+RM= rm -rf
+
+NAME = pipex
 
 FILES=	func/main.c \
 		func/gp_exec.c \
 		utils/ft_split.c \
 		utils/ft_strjoin.c \
-		utils/ft_strncmp.c
+		utils/ft_strncpm.c
 
-O_FILES= $(FILES:%.c=%.o)
+OBJ= $(FILES:%.c=%.o)
 
 all: $(NAME)
 
-$(NAME): $(O_FILES)
-	$(CC) $(CFLAGS) $(DEBUG) $(O_FILES) $(LIBFT) -o $(NAME)
+$(NAME): $(OBJ)
+
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 clean:
-	$(RM) $(O_FILES)
+	$(RM) $(OBJ)
 	
 fclean: clean
 	$(RM) $(NAME)
@@ -30,3 +33,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+    

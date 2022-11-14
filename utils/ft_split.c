@@ -6,100 +6,107 @@
 /*   By: busmanov <busmanov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 22:24:23 by busmanov          #+#    #+#             */
-/*   Updated: 2022/11/12 22:37:08 by busmanov         ###   ########.fr       */
+/*   Updated: 2022/11/13 00:21:47 by busmanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../func/pipex.h"
 
-static int	ft_count_words(const char *str, char c)
+static int	cmp_nb_word(const char *s, char c)
 {
-	int	x;
-	int	y;
+	int	i;
+	int	word;
 
-	x = 0;
-	y = 0;
-	while (str[x])
-	{
-		if (str[x] == c)
-			x++;
-		else
-		{
-			y++;
-			while (str[x] != '\0' && str[x] != c)
-				x++;
-		}
-	}
-	return (y);
-}
-
-static char	*ft_write_words(const char *str, char c)
-{
-	int		counterr;
-	char	*ptr;
-
-	counterr = 0;
-	while (*str && *str == c)
-		str++;
-	while (str[counterr] && str[counterr] != c)
-		counterr++;
-	ptr = (char *)malloc(sizeof(char) * (counterr + 1));
-	if (ptr == NULL)
-		return (NULL);
-	counterr = 0;
-	while (str[counterr] && str[counterr] != c)
-	{
-		ptr[counterr] = str[counterr];
-		counterr++;
-	}
-	ptr[counterr] = '\0';
-	return (ptr);
-}
-
-static void	ft_free_words(int i, char **pptr)
-{
-	while (i > 0)
-	{
-		free(pptr[i - 1]);
-		i--;
-	}
-	free(pptr);
-}
-
-static int	ft_free(int counter, char **pptr)
-{
-	if (pptr[counter] == NULL)
-	{
-		ft_free_words(counter, pptr);
+	if (!s)
 		return (0);
+	word = 0;
+	i = 0;
+	while (s[i] == c && s[i] != '\0')
+	{
+		i++;
 	}
-	return (1);
+	while (s[i])
+	{
+		while (s[i] && (s[i] != c))
+			i++;
+		word++;
+		while (s[i] == c && s[i] != '\0')
+			i++;
+	}
+	return (word);
+}
+
+static int	cmp_nb_caract(const char *s, char c, char **str)
+{
+	int	n;
+	int	i;
+	int	m;
+
+	n = 0;
+	i = 0;
+	m = 0;
+	while (s[i] == c && s[i] != '\0')
+		i++;
+	while (s[i])
+	{
+		while (s[i] && (s[i] != c))
+		{
+			i++;
+			n++;
+		}
+		str[m] = malloc(sizeof(char) * (n + 1));
+		if (!str)
+			return (0);
+		m++;
+		n = 0;
+		while (s[i] == c && s[i] != '\0')
+			i++;
+	}
+	return (0);
+}
+
+static void	ft_assembleall(char const *s, char c, char **str)
+{
+	int	i;
+	int	m;
+	int	mm;
+
+	i = 0;
+	m = 0;
+	mm = 0;
+	while (s[i] == c && s[i] != '\0')
+		i++;
+	while (s[i])
+	{
+		while (s[i] && (s[i] != c))
+		{
+			str[m][mm] = s[i];
+			i++;
+			mm++;
+		}
+		str[m][mm] = '\0';
+		mm = 0;
+		m++;
+		while (s[i] == c && s[i] != '\0')
+			i++;
+	}
+	str[m] = NULL;
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**pptr;
-	int		counter;
-	int		num_word;
+	char	**str;
+	int		i;
+	int		m;
+	int		mm;
 
-	if (!s)
+	i = 0;
+	m = 0;
+	mm = 0;
+	str = malloc((sizeof(char *) * (cmp_nb_word(s, c) + 1)));
+	if (!str)
 		return (NULL);
-	num_word = ft_count_words(s, c);
-	pptr = (char **)malloc(sizeof(char *) * (num_word + 1));
-	if (pptr == NULL)
-		return (NULL);
-	counter = 0;
-	while (counter < num_word)
-	{
-		while (*s && *s == c)
-			s++;
-		pptr[counter] = ft_write_words(s, c);
-		if (!(ft_free(counter, pptr)))
-			return (NULL);
-		while (*s && *s != c)
-			s++;
-		counter++;
-	}
-	pptr[counter] = NULL;
-	return (pptr);
+	cmp_nb_caract(s, c, str);
+	ft_assembleall(s, c, str);
+	return (str);
 }
