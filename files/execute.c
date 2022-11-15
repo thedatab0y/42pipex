@@ -38,6 +38,8 @@ char *obtain_cmdpath(char *path, char *command)//gets the cmd_path by joining th
 {
 	char *p;
 	
+	if (command == NULL)
+		exit(127);//in case there is seg fault, we exit immedietely
 	p = ft_strjoin(path, command);//libft func
 	free(path);//free to prevent leaks
 	return(p);
