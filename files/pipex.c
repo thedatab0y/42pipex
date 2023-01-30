@@ -54,12 +54,12 @@ void second_process(int outfile, char **av, char **envp, int *fd)
 //  |
 //  |-- fork()
 //       |
-//       |-- child // cmd1
+//       |-- child 1 // cmd1
 //       :     |--dup2()
 //       :     |--close end[0]
 //       :     |--execve(cmd1)
 //       :
-//       |-- parent // cmd2
+//       |-- child 2 // cmd2
 //             |--dup2()
 //             |--close end[1]
 //             |--execve(cmd2)
